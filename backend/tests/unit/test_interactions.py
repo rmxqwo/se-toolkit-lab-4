@@ -24,3 +24,26 @@ def test_filter_returns_interaction_with_matching_ids() -> None:
     result = _filter_by_item_id(interactions, 1)
     assert len(result) == 1
     assert result[0].id == 1
+
+def test_filter_excludes_interaction_with_different_learner_id(
+    sample_interaction1: Interaction,
+    sample_interaction2: Interaction,
+    sample_interaction3: Interaction,
+) -> None:
+    """
+    Test that filtering by item_id=1 returns interactions with item_id=1,
+    even when learner_id is different.
+    """
+    # Create interactions with different item_id and learner_id
+    interactions = [
+        Interaction(id=1, item_id=1, learner_id=2, timestamp=datetime.now()),
+        Interaction(id=2, item_id=2, learner_id=1, timestamp=datetime.now()),
+        Interaction(id=3, item_id=1, learner_id=3, timestamp=datetime.now()),
+    ]
+    
+    # Filter by item_id=1
+    filtered = _filter_by_item_id(interactions, 1)
+    
+    # Should return both interactions with item_id=1
+    assert len(filtered) == 2
+    assert all(i.item_id == 1 for i in filtered)
