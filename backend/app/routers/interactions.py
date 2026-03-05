@@ -10,13 +10,14 @@ from app.models.interaction import InteractionLog, InteractionLogCreate, Interac
 
 router = APIRouter()
 
-
 def _filter_by_item_id(
-    interactions: list[InteractionLog], item_id: int | None
-) -> list[InteractionLog]:
+    interactions: list[Interaction], item_id: int | None
+) -> list[Interaction]:
+    """Filter interactions by item_id."""
     if item_id is None:
         return interactions
-    return [i for i in interactions if i.learner_id == item_id]
+    
+    return [i for i in interactions if i.item_id == item_id]
 
 
 @router.get("/", response_model=list[InteractionModel])
